@@ -1,0 +1,596 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SHOW DATABASES
+--------------
+
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| 01_assign2db       |
+| 08_assign2db       |
+| 14_assign2db       |
+| 18_assign2db       |
+| 28_assign2db       |
+| 79_assign2db       |
+| coffee             |
+| flipped4db         |
+| lreid2assign2db    |
+| mysql              |
+| performance_schema |
+| tmp                |
+| vetoffice          |
++--------------------+
+14 rows in set (0.00 sec)
+
+--------------
+DROP DATABASE IF EXISTS lreid2assign2db
+--------------
+
+Query OK, 5 rows affected (0.18 sec)
+
+--------------
+CREATE DATABASE lreid2assign2db
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+SHOW TABLES
+--------------
+
+Empty set (0.00 sec)
+
+--------------
+CREATE TABLE passenger (passengerid INT NOT NULL, firstname VARCHAR(20) NOT NULL, lastname VARCHAR(20) NOT NULL,  PRIMARY KEY(passengerid))
+--------------
+
+Query OK, 0 rows affected (0.05 sec)
+
+--------------
+CREATE TABLE passport (passportnum CHAR(4) NOT NULL, citizenshipcountry VARCHAR(30) NOT NULL, expireydate DATE NOT NULL, 
+birthdate DATE NOT NULL,passengerid INT NOT NULL, PRIMARY KEY(passportnum),  FOREIGN KEY(passengerid) REFERENCES passenger(passengerid) ON DELETE CASCADE)
+--------------
+
+Query OK, 0 rows affected (0.20 sec)
+
+--------------
+CREATE TABLE bus (licenseplate CHAR(7) NOT NULL, capacity INT NOT NULL, PRIMARY KEY (licenseplate))
+--------------
+
+Query OK, 0 rows affected (0.06 sec)
+
+--------------
+CREATE TABLE bustrip (tripid INT NOT NULL, tripname VARCHAR(50) NOT NULL, 
+startdate DATE NOT NULL, enddate DATE NOT NULL, country VARCHAR(30) NOT NULL, 
+assignedbus CHAR(7) NOT NULL, urlImage CHAR(255),
+PRIMARY KEY (tripid), FOREIGN KEY(assignedbus) REFERENCES bus(licenseplate))
+--------------
+
+Query OK, 0 rows affected (0.06 sec)
+
+--------------
+CREATE TABLE booking (passengerid INT NOT NULL, tripid INT NOT NULL, price DECIMAL(10,2) NOT NULL, 
+PRIMARY KEY (passengerid, tripid), FOREIGN KEY (passengerid) REFERENCES passenger(passengerid) ON DELETE CASCADE, 
+FOREIGN KEY (tripid) REFERENCES bustrip(tripid) ON DELETE RESTRICT)
+--------------
+
+Query OK, 0 rows affected (0.19 sec)
+
+--------------
+SHOW TABLES
+--------------
+
++---------------------------+
+| Tables_in_lreid2assign2db |
++---------------------------+
+| booking                   |
+| bus                       |
+| bustrip                   |
+| passenger                 |
+| passport                  |
++---------------------------+
+5 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM bus
+--------------
+
+Empty set (0.00 sec)
+
+--------------
+LOAD DATA LOCAL INFILE 'loaddatafall2021.txt' INTO TABLE bus FIELDS TERMINATED BY ','
+--------------
+
+Query OK, 8 rows affected (0.01 sec)
+Records: 8  Deleted: 0  Skipped: 0  Warnings: 0
+
+--------------
+SELECT * FROM bus
+--------------
+
++--------------+----------+
+| licenseplate | capacity |
++--------------+----------+
+| CAND123      |       50 |
+| TAXI111      |        4 |
+| TAXI222      |        3 |
+| TAXI333      |        4 |
+| UWO1122      |       70 |
+| UWO3311      |       62 |
+| VAN1111      |       10 |
+| VAN2222      |       15 |
++--------------+----------+
+8 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM passenger
+--------------
+
+Empty set (0.01 sec)
+
+--------------
+INSERT INTO passenger VALUES (11, "Homer", "Simpson")
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passenger VALUES (22, "Marge", "Simpson")
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO passenger VALUES (33, "Bart", "Simpson")
+--------------
+
+Query OK, 1 row affected (0.02 sec)
+
+--------------
+INSERT INTO passenger VALUES (34, "Lisa", "Simpson")
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO passenger VALUES (35, "Maggie", "Simpson")
+--------------
+
+Query OK, 1 row affected (0.11 sec)
+
+--------------
+INSERT INTO passenger VALUES (44, "Ned", "Flanders")
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passenger VALUES (45, "Todd", "Flanders")
+--------------
+
+Query OK, 1 row affected (0.02 sec)
+
+--------------
+INSERT INTO passenger VALUES (66, "Heidi", "Klum")
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO passenger VALUES (77, "Michael", "Scott")
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO passenger VALUES (78, "Dwight", "Schrute")
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO passenger VALUES (79, "Pam", "Beesly")
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passenger VALUES (80, "Creed", "Bratton")
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passenger VALUES (81, "Niles", "Crane")
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+SELECT * FROM passenger
+--------------
+
++-------------+-----------+----------+
+| passengerid | firstname | lastname |
++-------------+-----------+----------+
+|          11 | Homer     | Simpson  |
+|          22 | Marge     | Simpson  |
+|          33 | Bart      | Simpson  |
+|          34 | Lisa      | Simpson  |
+|          35 | Maggie    | Simpson  |
+|          44 | Ned       | Flanders |
+|          45 | Todd      | Flanders |
+|          66 | Heidi     | Klum     |
+|          77 | Michael   | Scott    |
+|          78 | Dwight    | Schrute  |
+|          79 | Pam       | Beesly   |
+|          80 | Creed     | Bratton  |
+|          81 | Niles     | Crane    |
++-------------+-----------+----------+
+13 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM passport
+--------------
+
+Empty set (0.00 sec)
+
+--------------
+INSERT INTO passport VALUES ("US10", "USA", "2025-1-1", "1970-2-19",11)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO passport VALUES ("US12", "USA", "2025-1-1", "1972-8-12",22)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passport VALUES ("US13", "USA", "2025-1-1", "2001-5-12",33)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passport VALUES ("US14", "USA", "2025-1-1", "2004-3-19",34)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passport VALUES ("US15", "USA", "2025-1-1", "2012-9-17",35)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO passport VALUES ("US22", "USA", "2030-4-4", "1950-6-11",44)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passport VALUES ("US23", "USA", "2018-3-3", "1940-6-24",45)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passport VALUES ("GE11", "Germany", "2027-1-1", "1970-7-12",66)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passport VALUES ("US88", "Canada", "2030-2-13", "1979-4-25",77)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO passport VALUES ("US89", "Canada", "2022-2-2", "1976-4-8",78)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passport VALUES ("US90", "Italy", "2020-2-28", "1980-4-4",79)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO passport VALUES ("US91", "Germany", "2030-1-1", "1959-2-2",80)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO passport VALUES ("ABCD", "Spain", "2025-1-1", "1970-9-12",81)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+SELECT * FROM passport
+--------------
+
++-------------+--------------------+-------------+------------+-------------+
+| passportnum | citizenshipcountry | expireydate | birthdate  | passengerid |
++-------------+--------------------+-------------+------------+-------------+
+| ABCD        | Spain              | 2025-01-01  | 1970-09-12 |          81 |
+| GE11        | Germany            | 2027-01-01  | 1970-07-12 |          66 |
+| US10        | USA                | 2025-01-01  | 1970-02-19 |          11 |
+| US12        | USA                | 2025-01-01  | 1972-08-12 |          22 |
+| US13        | USA                | 2025-01-01  | 2001-05-12 |          33 |
+| US14        | USA                | 2025-01-01  | 2004-03-19 |          34 |
+| US15        | USA                | 2025-01-01  | 2012-09-17 |          35 |
+| US22        | USA                | 2030-04-04  | 1950-06-11 |          44 |
+| US23        | USA                | 2018-03-03  | 1940-06-24 |          45 |
+| US88        | Canada             | 2030-02-13  | 1979-04-25 |          77 |
+| US89        | Canada             | 2022-02-02  | 1976-04-08 |          78 |
+| US90        | Italy              | 2020-02-28  | 1980-04-04 |          79 |
+| US91        | Germany            | 2030-01-01  | 1959-02-02 |          80 |
++-------------+--------------------+-------------+------------+-------------+
+13 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM bustrip
+--------------
+
+Empty set (0.00 sec)
+
+--------------
+INSERT INTO bustrip VALUES (1,'Castles of Germany','2022-1-1','2022-1-17','Germany','VAN1111','https://csd.uwo.ca/~lreid2/cs3319/assignments/assignment3/pics/germany.png')
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO bustrip VALUES (2,'Tuscany Sunsets','2022-3-3','2022-3-14','Italy','TAXI222','https://csd.uwo.ca/~lreid2/cs3319/assignments/assignment3/pics/italy.png')
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO bustrip VALUES (3,'California Wines','2022-5-5','2022-5-10','USA','VAN2222', NULL)
+--------------
+
+Query OK, 1 row affected (0.02 sec)
+
+--------------
+INSERT INTO bustrip VALUES (4,'Beaches Galore','2022-4-4','2022-4-14','Bermuda','TAXI222', NULL)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO bustrip VALUES (5,'Cottage Country','2022-6-1','2022-6-22','Canada','CAND123', NULL)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO bustrip VALUES (6,'Arrivaderci Roma','2022-7-5','2022-7-15','Italy','TAXI111', NULL)
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO bustrip VALUES (7,'Shetland and Orkney','2022-9-9','2022-9-29','UK','TAXI111', NULL)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO bustrip VALUES (8,'Disney World and Sea World','2022-6-10','2022-6-20','USA','VAN2222', NULL)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO bustrip VALUES (9,'Greek Islands','2022-3-3','2022-3-17','Greece','TAXI111', NULL)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO bustrip VALUES (10,'Mexican Cartels','2022-4-4','2022-4-17','Mexico','TAXI111', NULL)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+SELECT * FROM bustrip
+--------------
+
++--------+----------------------------+------------+------------+---------+-------------+----------------------------------------------------------------------------+
+| tripid | tripname                   | startdate  | enddate    | country | assignedbus | urlImage                                                                   |
++--------+----------------------------+------------+------------+---------+-------------+----------------------------------------------------------------------------+
+|      1 | Castles of Germany         | 2022-01-01 | 2022-01-17 | Germany | VAN1111     | https://csd.uwo.ca/~lreid2/cs3319/assignments/assignment3/pics/germany.png |
+|      2 | Tuscany Sunsets            | 2022-03-03 | 2022-03-14 | Italy   | TAXI222     | https://csd.uwo.ca/~lreid2/cs3319/assignments/assignment3/pics/italy.png   |
+|      3 | California Wines           | 2022-05-05 | 2022-05-10 | USA     | VAN2222     | NULL                                                                       |
+|      4 | Beaches Galore             | 2022-04-04 | 2022-04-14 | Bermuda | TAXI222     | NULL                                                                       |
+|      5 | Cottage Country            | 2022-06-01 | 2022-06-22 | Canada  | CAND123     | NULL                                                                       |
+|      6 | Arrivaderci Roma           | 2022-07-05 | 2022-07-15 | Italy   | TAXI111     | NULL                                                                       |
+|      7 | Shetland and Orkney        | 2022-09-09 | 2022-09-29 | UK      | TAXI111     | NULL                                                                       |
+|      8 | Disney World and Sea World | 2022-06-10 | 2022-06-20 | USA     | VAN2222     | NULL                                                                       |
+|      9 | Greek Islands              | 2022-03-03 | 2022-03-17 | Greece  | TAXI111     | NULL                                                                       |
+|     10 | Mexican Cartels            | 2022-04-04 | 2022-04-17 | Mexico  | TAXI111     | NULL                                                                       |
++--------+----------------------------+------------+------------+---------+-------------+----------------------------------------------------------------------------+
+10 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM booking
+--------------
+
+Empty set (0.00 sec)
+
+--------------
+INSERT INTO booking VALUES (11,1,500)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (22,1,500)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (33,1,200)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO booking VALUES (34,1,200)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (35,1,200)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (66,1,600.99)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (44,8,400)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO booking VALUES (45,8,200)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (78,4,600)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (80,4,600)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO booking VALUES (78,1,550)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (33,8,300)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (34,8,300)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO booking VALUES (11,6,600)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (22,6,600)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (33,6,100)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO booking VALUES (34,6,100)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (35,6,100)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (11,7,300)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO booking VALUES (44,7,400)
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO booking VALUES (77,7,500)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO booking VALUES (81,10,1000)
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+SELECT * FROM booking
+--------------
+
++-------------+--------+---------+
+| passengerid | tripid | price   |
++-------------+--------+---------+
+|          11 |      1 |  500.00 |
+|          11 |      6 |  600.00 |
+|          11 |      7 |  300.00 |
+|          22 |      1 |  500.00 |
+|          22 |      6 |  600.00 |
+|          33 |      1 |  200.00 |
+|          33 |      6 |  100.00 |
+|          33 |      8 |  300.00 |
+|          34 |      1 |  200.00 |
+|          34 |      6 |  100.00 |
+|          34 |      8 |  300.00 |
+|          35 |      1 |  200.00 |
+|          35 |      6 |  100.00 |
+|          44 |      7 |  400.00 |
+|          44 |      8 |  400.00 |
+|          45 |      8 |  200.00 |
+|          66 |      1 |  600.99 |
+|          77 |      7 |  500.00 |
+|          78 |      1 |  550.00 |
+|          78 |      4 |  600.00 |
+|          80 |      4 |  600.00 |
+|          81 |     10 | 1000.00 |
++-------------+--------+---------+
+22 rows in set (0.00 sec)
+
+Bye
